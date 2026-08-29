@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DarImmo | لوحة الإدارة</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        header {
+            background: #0f172a;
+            color: white;
+            padding: 18px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #38bdf8;
+        }
+
+        button {
+            border: 0;
+            border-radius: 8px;
+            padding: 11px 16px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: #0f172a;
+            color: white;
+        }
+
+        .btn-success {
+            background: #16a34a;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #dc2626;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #0f172a;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .login-box,
+        .panel {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,.06);
+        }
+
+        .login-box {
+            max-width: 450px;
+            margin: 80px auto;
+        }
+
+        h1, h2, h3 {
+            margin-top: 0;
+        }
+
+        label {
+            display: block;
+            margin: 14px 0 7px;
+            font-weight: bold;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .full {
+            grid-column: 1 / -1;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .message.error {
+            display: block;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .message.success {
+            display: block;
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .properties-list {
+            margin-top: 30px;
+        }
+
+        .property-row {
+            background: white;
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 15px;
+            display: grid;
+            grid-template-columns: 120px 1fr auto;
+            gap: 18px;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,.05);
+        }
+
+        .property-row img {
+            width: 120px;
+            height: 90px;
+            object-fit: cover;
+            border-radius: 10px;
+            background: #e2e8f0;
+        }
+
+        .property-info h3 {
+            margin-bottom: 8px;
+        }
+
+        .property-info p {
+            margin: 5px 0;
+            color: #64748b;
+        }
+
+        .row-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .available {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .sold {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .rented {
+            background: #ffedd5;
+            color: #9a3412;
+        }
+
+        .images-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .image-item {
+            position: relative;
+        }
+
+        .image-item img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .image-delete {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background: #dc2626;
+            color: white;
+            width: 28px;
+            height: 28px;
+            padding: 0;
+            border-radius: 50%;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        @media (max-width: 700px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .full {
+                grid-column: auto;
+            }
+
+            .property-row {
+                grid-template-columns: 1fr;
+            }
+
+            .property-row img {
+                width: 100%;
+                height: 180px;
+            }
+
+            .row-actions {
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        <span>Dar</span>Immo Admin
+    </div>
+
+    <div class="top-actions">
+        <a href="index.html" style="color:white;text-decoration:none;">
+            الموقع
+        </a>
+
+        <button id="logoutBtn" class="btn-danger">
+            تسجيل الخروج
+        </button>
+    </div>
+</header>
+
+
+<main>
+
+    <!-- LOGIN -->
+
+    <section id="loginSection" class="login-box">
+
+        <h2>تسجيل دخول الإدارة</h2>
+
+        <p>
+            أدخل بيانات حساب الإدارة للدخول إلى لوحة التحكم.
+        </p>
+
+        <label>البريد الإلكتروني</label>
+
+        <input
+            id="loginEmail"
+            type="email"
+            placeholder="admin@example.com"
+        >
+
+        <label>كلمة المرور</label>
+
+        <input
+            id="loginPassword"
+            type="password"
+            placeholder="********"
+        >
+
+        <div class="actions">
+            <button id="loginBtn" class="btn-primary">
+                دخول
+            </button>
+        </div>
+
+        <div id="loginMessage" class="message"></div>
+
+    </section>
+
+
+    <!-- ADMIN -->
+
+    <section id="adminSection" class="hidden">
+
+        <div class="panel">
+
+            <h1>لوحة إدارة العقارات</h1>
+
+            <p>
+                من هنا يمكنك إضافة وتعديل وحذف العقارات وإدارة الصور والحالة.
+            </p>
+
+        </div>
+
+
+        <!-- FORM -->
+
+        <div class="panel" style="margin-top:25px;">
+
+            <h2 id="formTitle">
+                إضافة عقار جديد
+            </h2>
+
+            <input type="hidden" id="propertyId">
+
+            <div class="form-grid">
+
+                <div>
+                    <label>عنوان العقار</label>
+                    <input id="title" type="text" placeholder="مثلاً: شقة عصرية بالقنيطرة">
+                </div>
+
+                <div>
+                    <label>نوع المعاملة</label>
+
+                    <select id="transaction_type">
+                        <option value="sale">للبيع</option>
+                        <option value="rent">للكراء</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>نوع العقار</label>
+
+                    <select id="property_type">
+                        <option value="شقة">شقة</option>
+                        <option value="فيلا">فيلا</option>
+                        <option value="منزل">منزل</option>
+                        <option value="أرض">أرض</option>
+                        <option value="محل تجاري">محل تجاري</option>
+                        <option value="مكتب">مكتب</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>المدينة</label>
+
+                    <input id="city" type="text" placeholder="القنيطرة">
+                </div>
+
+                <div>
+                    <label>الثمن</label>
+
+                    <input id="price" type="number" placeholder="850000">
+                </div>
+
+                <div>
+                    <label>المساحة m²</label>
+
+                    <input id="surface" type="number" placeholder="95">
+                </div>
+
+                <div>
+                    <label>عدد الغرف</label>
+
+                    <input id="bedrooms" type="number" placeholder="3">
+                </div>
+
+                <div>
+                    <label>عدد الحمامات</label>
+
+                    <input id="bathrooms" type="number" placeholder="2">
+                </div>
+
+                <div>
+                    <label>الحالة</label>
+
+                    <select id="status">
+                        <option value="available">متاح</option>
+                        <option value="sold">تم البيع</option>
+                        <option value="rented">تم الكراء</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>مميز؟</label>
+
+                    <select id="featured">
+                        <option value="false">لا</option>
+                        <option value="true">نعم</option>
+                    </select>
+                </div>
+
+                <div class="full">
+                    <label>الوصف</label>
+
+                    <textarea
+                        id="description"
+                        placeholder="اكتب وصف العقار هنا..."
+                    ></textarea>
+                </div>
+
+                <div class="full">
+                    <label>صور العقار</label>
+
+                    <input
+                        id="images"
+                        type="file"
+                        accept="image/*"
+                        multiple
+                    >
+
+                    <div id="imagesPreview" class="images-preview"></div>
+                </div>
+
+            </div>
+
+
+            <div class="actions">
+
+                <button id="saveBtn" class="btn-success">
+                    حفظ العقار
+                </button>
+
+                <button id="cancelBtn" class="btn-secondary hidden">
+                    إلغاء التعديل
+                </button>
+
+            </div>
+
+            <div id="formMessage" class="message"></div>
+
+        </div>
+
+
+        <!-- LIST -->
+
+        <div class="properties-list">
+
+            <div class="panel">
+                <h2>العقارات</h2>
+
+                <div id="propertiesList">
+                    جاري تحميل العقارات...
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<script>
+
+let currentImages = [];
+let selectedFiles = [];
+
+
+/* =========================
+   LOGIN
+========================= */
+
+const loginSection = document.getElementById("loginSection");
+const adminSection = document.getElementById("adminSection");
+
+const loginBtn = document.getElementById("loginBtn");
+const logoutBtn = document.getElementById("logoutBtn");
+
+
+function showLoginMessage(message) {
+
+    const box = document.getElementById("loginMessage");
+
+    box.textContent = message;
+    box.className = "message error";
+}
+
+
+loginBtn.addEventListener("click", async () => {
+
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPassword").value;
+
+    if (!email || !password) {
+
+        showLoginMessage("أدخل البريد الإلكتروني وكلمة المرور.");
+
+        return;
+    }
+
+
+    const { error } = await supabaseClient.auth.signInWithPassword({
+        email,
+        password
+    });
+
+
+    if (error) {
+
+        showLoginMessage(error.message);
+
+        return;
+    }
+
+
+    await checkUser();
+
+});
+
+
+logoutBtn.addEventListener("click", async () => {
+
+    await supabaseClient.auth.signOut();
+
+    adminSection.classList.add("hidden");
+    loginSection.classList.remove("hidden");
+
+});
+
+
+async function checkUser() {
+
+    const { data } = await supabaseClient.auth.getUser();
+
+    if (data.user) {
+
+        loginSection.classList.add("hidden");
+        adminSection.classList.remove("hidden");
+
+        loadProperties();
+
+    } else {
+
+        loginSection.classList.remove("hidden");
+        adminSection.classList.add("hidden");
+
+    }
+
+}
+
+
+/* =========================
+   FORM
+========================= */
+
+const saveBtn = document.getElementById("saveBtn");
+const cancelBtn = document.getElementById("cancelBtn");
+
+const imageInput = document.getElementById("images");
+
+
+imageInput.addEventListener("change", () => {
+
+    selectedFiles = Array.from(imageInput.files);
+
+    renderSelectedImages();
+
+});
+
+
+function renderSelectedImages() {
+
+    const preview = document.getElementById("imagesPreview");
+
+    preview.innerHTML = "";
+
+    selectedFiles.forEach(file => {
+
+        const url = URL.createObjectURL(file);
+
+        preview.innerHTML += `
+            <div class="image-item">
+                <img src="${url}" alt="">
+            </div>
+        `;
+
+    });
+
+
+    currentImages.forEach(image => {
+
+        preview.innerHTML += `
+            <div class="image-item">
+
+                <img src="${image.image_url}" alt="">
+
+                <button
+                    class="image-delete"
+                    onclick="deleteImage(${image.id}, '${image.image_url}')"
+                >
+                    ×
+                </button>
+
+            </div>
+        `;
+
+    });
+
+}
+
+
+/* =========================
+   SAVE PROPERTY
+========================= */
+
+saveBtn.addEventListener("click", saveProperty);
+
+
+async function saveProperty() {
+
+    const propertyId = document.getElementById("propertyId").value;
+
+    const propertyData = {
+
+        title: document.getElementById("title").value.trim(),
+
+        transaction_type:
+            document.getElementById("transaction_type").value,
+
+        property_type:
+            document.getElementById("property_type").value,
+
+        city:
+            document.getElementById("city").value.trim(),
+
+        price:
+            Number(document.getElementById("price").value) || null,
+
+        surface:
+            Number(document.getElementById("surface").value) || null,
+
+        bedrooms:
+            Number(document.getElementById("bedrooms").value) || null,
+
+        bathrooms:
+            Number(document.getElementById("bathrooms").value) || null,
+
+        description:
+            document.getElementById("description").value.trim(),
+
+        status:
+            document.getElementById("status").value,
+
+        featured:
+            document.getElementById("featured").value === "true"
+    };
+
+
+    if (!propertyData.title) {
+
+        showFormMessage("اكتب عنوان العقار.", true);
+
+        return;
+    }
+
+
+    let property;
+
+
+    if (propertyId) {
+
+        const result = await supabaseClient
+            .from("properties")
+            .update(propertyData)
+            .eq("id", propertyId)
+            .select()
+            .single();
+
+        if (result.error) {
+
+            showFormMessage(result.error.message, true);
+
+            return;
+        }
+
+        property = result.data;
+
+    } else {
+
+        const result = await supabaseClient
+            .from("properties")
+            .insert(propertyData)
+            .select()
+            .single();
+
+        if (result.error) {
+
+            showFormMessage(result.error.message, true);
+
+            return;
+        }
+
+        property = result.data;
+    }
+
+
+    /* رفع الصور */
+
+    for (const file of selectedFiles) {
+
+        const fileName =
+            `${Date.now()}-${Math.random().toString(36).substring(2)}-${file.name}`;
+
+        const filePath =
+            `${property.id}/${fileName}`;
+
+
+        const upload = await supabaseClient.storage
+            .from("property-images")
+            .upload(filePath, file);
+
+
+        if (upload.error) {
+
+            console.error("Upload error:", upload.error);
+
+            continue;
+        }
+
+
+        const { data: publicUrlData } =
+            supabaseClient.storage
+                .from("property-images")
+                .getPublicUrl(filePath);
+
+
+        const imageUrl = publicUrlData.publicUrl;
+
+
+        await supabaseClient
+            .from("property_images")
+            .insert({
+
+                property_id: property.id,
+
+                image_url: imageUrl
+
+            });
+
+    }
+
+
+    showFormMessage("تم حفظ العقار بنجاح.", false);
+
+    resetForm();
+
+    loadProperties();
+
+}
+
+
+/* =========================
+   LOAD PROPERTIES
+========================= */
+
+async function loadProperties() {
+
+    const container =
+        document.getElementById("propertiesList");
+
+
+    container.innerHTML =
+        "جاري تحميل العقارات...";
+
+
+    const { data, error } =
+        await supabaseClient
+            .from("properties")
+            .select("*")
+            .order("id", { ascending: false });
+
+
+    if (error) {
+
+        container.innerHTML =
+            `<p style="color:red;">${error.message}</p>`;
+
+        return;
+    }
+
+
+    if (!data || data.length === 0) {
+
+        container.innerHTML =
+            "<p>لا توجد عقارات.</p>";
+
+        return;
+    }
+
+
+    const { data: images } =
+        await supabaseClient
+            .from("property_images")
+            .select("id,property_id,image_url");
+
+
+    container.innerHTML = "";
+
+
+    data.forEach(property => {
+
+        const propertyImages =
+            images?.filter(
+                image =>
+                    Number(image.property_id) ===
+                    Number(property.id)
+            ) || [];
+
+
+        const firstImage =
+            propertyImages[0]?.image_url || "";
+
+
+        const statusText =
+            property.status === "sold"
+                ? "تم البيع"
+                : property.status === "rented"
+                    ? "تم الكراء"
+                    : "متاح";
+
+
+        const statusClass =
+            property.status === "sold"
+                ? "sold"
+                : property.status === "rented"
+                    ? "rented"
+                    : "available";
+
+
+        const row =
+            document.createElement("div");
+
+
+        row.className =
+            "property-row";
+
+
+        row.innerHTML = `
+
+            ${
+                firstImage
+                    ? `<img src="${firstImage}" alt="${property.title}">`
+                    : `<div style="
+                        width:120px;
+                        height:90px;
+                        border-radius:10px;
+                        background:#e2e8f0;
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        font-size:40px;
+                    ">🏠</div>`
+            }
+
+
+            <div class="property-info">
+
+                <h3>
+                    ${property.title || ""}
+                </h3>
+
+                <p>
+                    ${property.city || ""}
+                    —
+                    ${property.property_type || ""}
+                </p>
+
+                <p>
+                    ${Number(property.price || 0).toLocaleString("fr-FR")}
+                    DH
+                </p>
+
+                <span class="status-badge ${statusClass}">
+                    ${statusText}
+                </span>
+
+            </div>
+
+
+            <div class="row-actions">
+
+                <button
+                    class="btn-primary"
+                    onclick="editProperty(${property.id})"
+                >
+                    تعديل
+                </button>
+
+                <button
+                    class="btn-danger"
+                    onclick="deleteProperty(${property.id})"
+                >
+                    حذف
+                </button>
+
+                <a
+                    href="details.html?id=${property.id}"
+                    target="_blank"
+                    class="btn-secondary"
+                    style="
+                        text-decoration:none;
+                        padding:11px 16px;
+                        border-radius:8px;
+                    "
+                >
+                    عرض
+                </a>
+
+            </div>
+
+        `;
+
+
+        container.appendChild(row);
+
+    });
+
+}
+
+
+/* =========================
+   EDIT
+========================= */
+
+async function editProperty(id) {
+
+    const { data: property, error } =
+        await supabaseClient
+            .from("properties")
+            .select("*")
+            .eq("id", id)
+            .single();
+
+
+    if (error || !property) {
+
+        alert("تعذر تحميل العقار.");
+
+        return;
+    }
+
+
+    document.getElementById("propertyId").value =
+        property.id;
+
+    document.getElementById("title").value =
+        property.title || "";
+
+    document.getElementById("transaction_type").value =
+        property.transaction_type || "sale";
+
+    document.getElementById("property_type").value =
+        property.property_type || "شقة";
+
+    document.getElementById("city").value =
+        property.city || "";
+
+    document.getElementById("price").value =
+        property.price || "";
+
+    document.getElementById("surface").value =
+        property.surface || "";
+
+    document.getElementById("bedrooms").value =
+        property.bedrooms || "";
+
+    document.getElementById("bathrooms").value =
+        property.bathrooms || "";
+
+    document.getElementById("description").value =
+        property.description || "";
+
+    document.getElementById("status").value =
+        property.status || "available";
+
+    document.getElementById("featured").value =
+        property.featured ? "true" : "false";
+
+
+    const { data: images } =
+        await supabaseClient
+            .from("property_images")
+            .select("id,property_id,image_url")
+            .eq("property_id", id);
+
+
+    currentImages = images || [];
+
+    selectedFiles = [];
+
+    imageInput.value = "";
+
+    renderSelectedImages();
+
+
+    document.getElementById("formTitle").textContent =
+        "تعديل العقار";
+
+    cancelBtn.classList.remove("hidden");
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+/* =========================
+   DELETE PROPERTY
+========================= */
+
+async function deleteProperty(id) {
+
+    const confirmed =
+        confirm("واش متأكد بغيتي تحذف هاد العقار؟");
+
+
+    if (!confirmed) return;
+
+
+    const { data: images } =
+        await supabaseClient
+            .from("property_images")
+            .select("image_url")
+            .eq("property_id", id);
+
+
+    if (images) {
+
+        for (const image of images) {
+
+            const marker =
+                "/storage/v1/object/public/property-images/";
+
+            const index =
+                image.image_url.indexOf(marker);
+
+
+            if (index !== -1) {
+
+                const filePath =
+                    decodeURIComponent(
+                        image.image_url.substring(
+                            index + marker.length
+                        )
+                    );
+
+
+                await supabaseClient.storage
+                    .from("property-images")
+                    .remove([filePath]);
+
+            }
+
+        }
+
+    }
+
+
+    await supabaseClient
+        .from("property_images")
+        .delete()
+        .eq("property_id", id);
+
+
+    const { error } =
+        await supabaseClient
+            .from("properties")
+            .delete()
+            .eq("id", id);
+
+
+    if (error) {
+
+        alert(error.message);
+
+        return;
+    }
+
+
+    loadProperties();
+
+}
+
+
+/* =========================
+   DELETE IMAGE
+========================= */
+
+async function deleteImage(id, imageUrl) {
+
+    if (!confirm("حذف الصورة؟")) return;
+
+
+    const marker =
+        "/storage/v1/object/public/property-images/";
+
+
+    const index =
+        imageUrl.indexOf(marker);
+
+
+    if (index !== -1) {
+
+        const filePath =
+            decodeURIComponent(
+                imageUrl.substring(
+                    index + marker.length
+                )
+            );
+
+
+        await supabaseClient.storage
+            .from("property-images")
+            .remove([filePath]);
+
+    }
+
+
+    await supabaseClient
+        .from("property_images")
+        .delete()
+        .eq("id", id);
+
+
+    currentImages =
+        currentImages.filter(
+            image => image.id !== id
+        );
+
+
+    renderSelectedImages();
+
+}
+
+
+/* =========================
+   RESET
+========================= */
+
+cancelBtn.addEventListener("click", resetForm);
+
+
+function resetForm() {
+
+    document.getElementById("propertyId").value = "";
+
+    document.getElementById("title").value = "";
+
+    document.getElementById("transaction_type").value =
+        "sale";
+
+    document.getElementById("property_type").value =
+        "شقة";
+
+    document.getElementById("city").value = "";
+
+    document.getElementById("price").value = "";
+
+    document.getElementById("surface").value = "";
+
+    document.getElementById("bedrooms").value = "";
+
+    document.getElementById("bathrooms").value = "";
+
+    document.getElementById("description").value = "";
+
+    document.getElementById("status").value =
+        "available";
+
+    document.getElementById("featured").value =
+        "false";
+
+    imageInput.value = "";
+
+    selectedFiles = [];
+
+    currentImages = [];
+
+    document.getElementById("imagesPreview").innerHTML = "";
+
+    document.getElementById("formTitle").textContent =
+        "إضافة عقار جديد";
+
+    cancelBtn.classList.add("hidden");
+
+}
+
+
+/* =========================
+   MESSAGE
+========================= */
+
+function showFormMessage(message, error) {
+
+    const box =
+        document.getElementById("formMessage");
+
+
+    box.textContent = message;
+
+
+    box.className =
+        error
+            ? "message error"
+            : "message success";
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+checkUser();
+
+</script>
+
+</body>
+</html>
