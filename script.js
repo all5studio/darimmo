@@ -1,36 +1,43 @@
 async function loadProperties() {
-const { data, error } = await supabaseClient
-    .from("properties")
-.select("*")
-    .order("id", { ascending: false });
+    const { data, error } = await supabaseClient
+        .from("properties")
+        .select("*")
+        .order("id", { ascending: false });
 
     if (error) {
-       console.error("Supabase error:", JSON.stringify(error, null, 2));
+        console.error("Supabase error:", JSON.stringify(error, null, 2));
         return;
     }
 
-    const grid = document.getElementById("property-grid");
+    const { data: images, error: imagesError } = await supabaseClient
+        .from("property_images")
+        .select("property_id, image_url");
 
+    if (imagesError) {
+        console.error("Images error:", JSON.stringify(imagesError, null, 2));
+    }
+
+    const grid = document.getElementById("property-grid");
     grid.innerHTML = "";
 
     data.forEach(property => {
         const card = document.createElement("article");
 
         card.className = "property-card";
-
         card.dataset.city = property.city;
         card.dataset.type = property.transaction_type;
 
+        const propertyImage = images?.find(
+            img => Number(img.property_id) === Number(property.id)
+        );
+
+        const imageHTML = propertyImage?.image_url
+            ? `<img src="${propertyImage.image_url}" alt="${property.title}" style="width:100%;height:100%;object-fit:cover;">`
+            : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#e2e8f0;font-size:60px;">🏠</div>`;
+
         card.innerHTML = `
             <div class="property-image">
-                <img 
-    src="${
-        property.property_images?.[0]?.image_url || ""
-    }"
-    alt="${property.title}"
-    style="width:100%;height:100%;object-fit:cover;"
-    onerror="this.style.display='none';"
-/>
+                ${imageHTML}
 
                 <span class="status ${
                     property.transaction_type === "rent" ? "rent" : ""
@@ -44,14 +51,9 @@ const { data, error } = await supabaseClient
             </div>
 
             <div class="property-content">
+                <p class="type">${property.property_type}</p>
 
-                <p class="type">
-                    ${property.property_type}
-                </p>
-
-                <h3>
-                    ${property.title}
-                </h3>
+                <h3>${property.title}</h3>
 
                 <p class="location">
                     📍 ${property.city}
@@ -70,14 +72,12 @@ const { data, error } = await supabaseClient
                 <button class="details-btn">
                     مشاهدة التفاصيل
                 </button>
-
             </div>
         `;
 
         grid.appendChild(card);
     });
 }
-
 
 document.addEventListener("DOMContentLoaded", () => {
     loadProperties();
