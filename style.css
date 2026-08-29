@@ -1,0 +1,406 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #0f766e;
+    --primary-dark: #115e59;
+    --dark: #172033;
+    --text: #475569;
+    --light: #f8fafc;
+    --white: #ffffff;
+    --border: #e2e8f0;
+}
+
+body {
+    font-family: Arial, Tahoma, sans-serif;
+    background: var(--light);
+    color: var(--dark);
+    line-height: 1.6;
+}
+
+.header {
+    height: 75px;
+    background: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 7%;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--dark);
+}
+
+.logo span {
+    color: var(--primary);
+}
+
+nav {
+    display: flex;
+    gap: 30px;
+}
+
+nav a {
+    text-decoration: none;
+    color: var(--dark);
+    font-weight: 600;
+}
+
+nav a:hover {
+    color: var(--primary);
+}
+
+.menu-btn {
+    display: none;
+    border: none;
+    background: none;
+    font-size: 25px;
+}
+
+.hero {
+    min-height: 560px;
+    display: flex;
+    align-items: center;
+    background:
+        linear-gradient(rgba(15, 23, 42, .65), rgba(15, 23, 42, .65)),
+        url("https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1800&q=85")
+        center/cover;
+}
+
+.hero-content {
+    width: 86%;
+    max-width: 1200px;
+    margin: auto;
+    color: white;
+}
+
+.badge {
+    display: inline-block;
+    background: rgba(255,255,255,.15);
+    padding: 8px 16px;
+    border-radius: 30px;
+    margin-bottom: 20px;
+}
+
+.hero h1 {
+    font-size: clamp(40px, 6vw, 70px);
+    line-height: 1.15;
+    margin-bottom: 20px;
+}
+
+.hero h1 span {
+    color: #5eead4;
+}
+
+.hero-text {
+    font-size: 19px;
+    max-width: 650px;
+    margin-bottom: 35px;
+}
+
+.search-box {
+    background: white;
+    padding: 12px;
+    border-radius: 15px;
+    display: flex;
+    gap: 10px;
+    max-width: 850px;
+    box-shadow: 0 15px 40px rgba(0,0,0,.2);
+}
+
+.search-box select,
+.search-box button {
+    height: 52px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    padding: 0 18px;
+    font-size: 15px;
+}
+
+.search-box select {
+    flex: 1;
+    background: white;
+}
+
+.search-box button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    min-width: 120px;
+}
+
+.search-box button:hover {
+    background: var(--primary-dark);
+}
+
+.section,
+.cities {
+    width: 86%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 80px 0;
+}
+
+.section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    margin-bottom: 35px;
+}
+
+.section-title p {
+    color: var(--primary);
+    font-weight: bold;
+}
+
+.section-title h2 {
+    font-size: 34px;
+}
+
+.section-title a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.property-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.property-card {
+    background: white;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    transition: .25s;
+}
+
+.property-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(15,23,42,.12);
+}
+
+.property-image {
+    height: 230px;
+    position: relative;
+}
+
+.property-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.status {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: var(--primary);
+    color: white;
+    padding: 6px 13px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.status.rent {
+    background: #334155;
+}
+
+.property-content {
+    padding: 22px;
+}
+
+.type {
+    color: var(--primary);
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.property-content h3 {
+    font-size: 20px;
+    margin: 5px 0;
+}
+
+.location {
+    color: var(--text);
+    margin-bottom: 15px;
+}
+
+.details {
+    display: flex;
+    justify-content: space-between;
+    color: var(--text);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+    padding-top: 15px;
+}
+
+.price {
+    color: var(--primary);
+    font-size: 22px;
+    font-weight: 800;
+    margin: 18px 0;
+}
+
+.details-btn {
+    width: 100%;
+    height: 45px;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    background: white;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.details-btn:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.city-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.city-card {
+    min-height: 160px;
+    border-radius: 18px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    color: white;
+    background:
+        linear-gradient(rgba(15,23,42,.35), rgba(15,23,42,.75)),
+        url("https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=700&q=80")
+        center/cover;
+}
+
+.city-card h3 {
+    font-size: 23px;
+}
+
+.city-card p {
+    opacity: .85;
+}
+
+.cta {
+    background: var(--dark);
+    color: white;
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.cta h2 {
+    font-size: 35px;
+    margin-bottom: 12px;
+}
+
+.cta p {
+    margin-bottom: 25px;
+}
+
+.cta button {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+footer {
+    background: #0b1120;
+    color: white;
+    text-align: center;
+    padding: 45px 20px;
+}
+
+footer .logo {
+    color: white;
+    margin-bottom: 10px;
+}
+
+footer p {
+    color: #94a3b8;
+    margin: 6px;
+}
+
+@media (max-width: 900px) {
+
+    nav {
+        display: none;
+    }
+
+    .menu-btn {
+        display: block;
+    }
+
+    .property-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .city-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .search-box {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .header {
+        padding: 0 5%;
+    }
+
+    .section,
+    .cities {
+        width: 90%;
+        padding: 55px 0;
+    }
+
+    .hero {
+        min-height: 650px;
+    }
+
+    .hero-content {
+        width: 90%;
+    }
+
+    .hero h1 {
+        font-size: 42px;
+    }
+
+    .property-grid,
+    .city-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .section-title {
+        display: block;
+    }
+
+    .section-title a {
+        display: inline-block;
+        margin-top: 15px;
+    }
+}

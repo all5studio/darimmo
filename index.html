@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DarImmo | عقارات المغرب</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="logo">
+        <span>Dar</span>Immo
+    </div>
+
+    <nav>
+        <a href="#">الرئيسية</a>
+        <a href="#properties">العقارات</a>
+        <a href="#cities">المدن</a>
+        <a href="#contact">تواصل معنا</a>
+    </nav>
+
+    <button class="menu-btn">☰</button>
+
+</header>
+
+
+<main>
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <p class="badge">🏠 منصة عقارية مغربية</p>
+
+        <h1>
+            لقا دارك الجديدة
+            <br>
+            <span>بسهولة وأمان</span>
+        </h1>
+
+        <p class="hero-text">
+            اكتشف أفضل الشقق والمنازل والفلل والأراضي للبيع والكراء في المغرب.
+        </p>
+
+
+        <div class="search-box">
+
+            <select id="transaction">
+                <option value="all">الكل</option>
+                <option value="sale">للبيع</option>
+                <option value="rent">للكراء</option>
+            </select>
+
+            <select id="city">
+                <option value="all">جميع المدن</option>
+                <option value="kenitra">القنيطرة</option>
+                <option value="rabat">الرباط</option>
+                <option value="casablanca">الدار البيضاء</option>
+                <option value="marrakech">مراكش</option>
+            </select>
+
+            <button onclick="searchProperties()">
+                🔍 بحث
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section id="properties" class="section">
+
+    <div class="section-title">
+
+        <div>
+            <p>اكتشف عروضنا</p>
+            <h2>عقارات مميزة</h2>
+        </div>
+
+        <a href="#">عرض جميع العقارات ←</a>
+
+    </div>
+
+
+    <div id="property-grid" class="property-grid">
+
+
+        <article class="property-card"
+                 data-city="kenitra"
+                 data-type="sale">
+
+            <div class="property-image">
+
+                <img
+                    src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=900&q=80"
+                    alt="شقة بالقنيطرة">
+
+                <span class="status">للبيع</span>
+
+            </div>
+
+            <div class="property-content">
+
+                <p class="type">شقة</p>
+
+                <h3>شقة عصرية بالقنيطرة</h3>
+
+                <p class="location">📍 القنيطرة، المغرب</p>
+
+                <div class="details">
+                    <span>🛏 3 غرف</span>
+                    <span>🚿 2 حمام</span>
+                    <span>📐 95 م²</span>
+                </div>
+
+                <div class="price">
+                    850,000 DH
+                </div>
+
+                <button class="details-btn">
+                    مشاهدة التفاصيل
+                </button>
+
+            </div>
+
+        </article>
+
+
+
+        <article class="property-card"
+                 data-city="rabat"
+                 data-type="rent">
+
+            <div class="property-image">
+
+                <img
+                    src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?auto=format&fit=crop&w=900&q=80"
+                    alt="شقة بالرباط">
+
+                <span class="status rent">للكراء</span>
+
+            </div>
+
+            <div class="property-content">
+
+                <p class="type">شقة</p>
+
+                <h3>شقة فاخرة بالرباط</h3>
+
+                <p class="location">📍 الرباط، المغرب</p>
+
+                <div class="details">
+                    <span>🛏 2 غرف</span>
+                    <span>🚿 1 حمام</span>
+                    <span>📐 80 م²</span>
+                </div>
+
+                <div class="price">
+                    7,500 DH / شهر
+                </div>
+
+                <button class="details-btn">
+                    مشاهدة التفاصيل
+                </button>
+
+            </div>
+
+        </article>
+
+
+
+        <article class="property-card"
+                 data-city="casablanca"
+                 data-type="sale">
+
+            <div class="property-image">
+
+                <img
+                    src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=900&q=80"
+                    alt="فيلا بالدار البيضاء">
+
+                <span class="status">للبيع</span>
+
+            </div>
+
+            <div class="property-content">
+
+                <p class="type">فيلا</p>
+
+                <h3>فيلا راقية بالدار البيضاء</h3>
+
+                <p class="location">📍 الدار البيضاء، المغرب</p>
+
+                <div class="details">
+                    <span>🛏 4 غرف</span>
+                    <span>🚿 3 حمامات</span>
+                    <span>📐 220 م²</span>
+                </div>
+
+                <div class="price">
+                    2,450,000 DH
+                </div>
+
+                <button class="details-btn">
+                    مشاهدة التفاصيل
+                </button>
+
+            </div>
+
+        </article>
+
+    </div>
+
+</section>
+
+
+<section id="cities" class="cities">
+
+    <div class="section-title">
+
+        <div>
+            <p>اختر وجهتك</p>
+            <h2>العقارات حسب المدينة</h2>
+        </div>
+
+    </div>
+
+
+    <div class="city-grid">
+
+        <div class="city-card">
+            <h3>القنيطرة</h3>
+            <p>120 عقار</p>
+        </div>
+
+        <div class="city-card">
+            <h3>الرباط</h3>
+            <p>245 عقار</p>
+        </div>
+
+        <div class="city-card">
+            <h3>الدار البيضاء</h3>
+            <p>430 عقار</p>
+        </div>
+
+        <div class="city-card">
+            <h3>مراكش</h3>
+            <p>185 عقار</p>
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="cta" id="contact">
+
+    <h2>عندك عقار وباغي تبيعو أو تكريه؟</h2>
+
+    <p>
+        تواصل معنا لإضافة عقارك إلى المنصة.
+    </p>
+
+    <button>
+        تواصل عبر WhatsApp
+    </button>
+
+</section>
+
+</main>
+
+
+<footer>
+
+    <div class="logo">
+        <span>Dar</span>Immo
+    </div>
+
+    <p>
+        منصة عقارية عصرية للمغرب
+    </p>
+
+    <p>
+        © 2026 DarImmo
+    </p>
+
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
