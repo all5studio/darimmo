@@ -69,9 +69,9 @@ async function loadProperties() {
                     ${Number(property.price).toLocaleString("fr-FR")} DH
                 </div>
 
-                <button class="details-btn">
-                    مشاهدة التفاصيل
-                </button>
+                <button class="details-btn" onclick="window.location.href='details.html?id=${property.id}'">
+    مشاهدة التفاصيل
+</button>
             </div>
         `;
 
