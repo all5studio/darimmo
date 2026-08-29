@@ -9,6 +9,14 @@ const { data, error } = await supabaseClient
         return;
     }
 
+    const { data: images, error: imagesError } = await supabaseClient
+    .from("property_images")
+    .select("property_id, image_url");
+
+if (imagesError) {
+    console.error("Images error:", imagesError);
+}
+
     const grid = document.getElementById("property-grid");
 
     grid.innerHTML = "";
