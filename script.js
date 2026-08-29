@@ -69,13 +69,18 @@ async function loadProperties() {
                     ${Number(property.price).toLocaleString("fr-FR")} DH
                 </div>
 
-                <button class="details-btn" onclick="window.location.href='details.html?id=${property.id}'">
+<button class="details-btn" data-id="${property.id}">
     مشاهدة التفاصيل
 </button>
             </div>
         `;
 
         grid.appendChild(card);
+
+        card.querySelector(".details-btn").addEventListener("click", () => {
+    window.location.href = `details.html?id=${property.id}`;
+});
+
     });
 }
 
